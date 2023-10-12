@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://classless.de/classless.css">
     <style>
         code.dia {
-            font-family: monospace;
+            font-family: "DejaVu Sans Mono", monospace;
             white-space: pre;
         }
         code.dia:hover { cursor: zoom-in; }
@@ -16,6 +16,7 @@
             position: fixed;
             top: 0;
             left: 0;
+            padding: 2rem;
             width: 100%!important;
             height: 100%!important;
             overflow: auto;
@@ -47,32 +48,32 @@
     <p>Another Figure</p>
     <figure>
         <pre><code class="dia" style="width: 10rem">
-                                           +-----+
-              +----[PWR]-------------------| USB |--+
-              |                            +-----+  |
-              |         GND/RST2  [ ][ ]            |
-              |       MOSI2/SCK2  [ ][ ]  A5/SCL[ ] |   C5
-              |          5V/MISO2 [ ][ ]  A4/SDA[ ] |   C4
-              |                             AREF[ ] |
-              |                              GND[ ] |
-              | [ ]N/C                    SCK/13[ ] |   B5
-              | [ ]IOREF                 MISO/12[ ] |   .
-              | [ ]RST                   MOSI/11[ ]~|   .
-              | [ ]3V3    +---+               10[ ]~|   .
-              | [ ]5v    -| A |-               9[ ]~|   .
-              | [ ]GND   -| R |-               8[ ] |   B0
-              | [ ]GND   -| D |-                    |
-              | [ ]Vin   -| U |-               7[ ] |   D7
-              |          -| I |-               6[ ]~|   .
-              | [ ]A0    -| N |-               5[ ]~|   .
-              | [ ]A1    -| O |-               4[ ] |   .
-              | [ ]A2     +---+           INT1/3[ ]~|   .
-              | [ ]A3                     INT0/2[ ] |   .
-              | [ ]A4/SDA  RST SCK MISO     TX>1[ ] |   .
-              | [ ]A5/SCL  [ ] [ ] [ ]      RX←0[ ] |   D0
-              |            [ ] [ ] [ ]              |
-              |  UNO_R3    GND MOSI 5V  ____________/
-              \_______________________/    
+                                   +-----+
+      +----[PWR]-------------------| USB |--+
+      |                            +-----+  |
+      |         GND/RST2  [ ][ ]            |
+      |       MOSI2/SCK2  [ ][ ]  A5/SCL[ ] |   C5
+      |          5V/MISO2 [ ][ ]  A4/SDA[ ] |   C4
+      |                             AREF[ ] |
+      |                              GND[ ] |
+      | [ ]N/C                    SCK/13[ ] |   B5
+      | [ ]IOREF                 MISO/12[ ] |   .
+      | [ ]RST                   MOSI/11[ ]~|   .
+      | [ ]3V3    +---+               10[ ]~|   .
+      | [ ]5v    -| A |-               9[ ]~|   .
+      | [ ]GND   -| R |-               8[ ] |   B0
+      | [ ]GND   -| D |-                    |
+      | [ ]Vin   -| U |-               7[ ] |   D7
+      |          -| I |-               6[ ]~|   .
+      | [ ]A0    -| N |-               5[ ]~|   .
+      | [ ]A1    -| O |-               4[ ] |   .
+      | [ ]A2     +---+           INT1/3[ ]~|   .
+      | [ ]A3                     INT0/2[ ] |   .
+      | [ ]A4/SDA  RST SCK MISO     TX>1[ ] |   .
+      | [ ]A5/SCL  [ ] [ ] [ ]      RX←0[ ] |   D0
+      |            [ ] [ ] [ ]              |
+      |  UNO_R3    GND MOSI 5V  ____________/
+      \_______________________/    
         </code></pre>
         <figcaption>The caption for the listing.</figcaption>        
       </figure>
@@ -132,7 +133,7 @@
                 updateDiaWidth(dia)
             } else {
                 diaP.classList.add('fullscreen');
-                dia.style.fontSize = 1.2*baseFontSize+"px";
+                dia.style.fontSize = "";
             }
         };
 
@@ -151,6 +152,7 @@
             //     diagram.style.fontSize = `${fontSize}px`;
             // });
             diagram.addEventListener('click', toggleFullscreen);
+            diagram.style.fontSize = baseFontSize+"px"
             updateDiaWidth(diagram)
             
         });
