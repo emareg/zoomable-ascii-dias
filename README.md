@@ -3,6 +3,8 @@ ASCII diagrams are great. They can be easily copied and displayed in all environ
 
 As a remedy, we use the following JS snippet to adjust the font size, such that the diagram always fits the screen width. If you click on it, you get the full size.
 
+[Demo](https://emanuel.regnath.info/zoomable-ascii-dias/)
+
 
 ```js
 const baseFontSize = 12
