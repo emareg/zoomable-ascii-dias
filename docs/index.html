@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Diagram Zoom</title>
+    <link rel="stylesheet" href="https://classless.de/classless.css">
+    <style>
+        code.dia {
+            font-family: monospace;
+            white-space: pre;
+        }
+        code.dia:hover { cursor: zoom-in; }
+        .fullscreen:hover { cursor: zoom-out!important; }
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%!important;
+            height: 100%!important;
+            z-index: 42;
+            /* background-color: white; */
+        }
+    </style>
+</head>
+<body>
+    <h1>Demo of Zoomable ASCII Diagrams</h1>
+    <p>This is a short demo of a zoomable ASCII diagram.</p>
+
+
+    <figure>
+        <pre><code id="diagram" class="dia">
+            ╭┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╮                         ╭┈┈┈┈┈┈┈┈┈┈┈╮
+            ┊ mount passphrase ┊━━━━━⎛key derivation⎞━━━▶┊ mount key ┊
+            ╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯ ,───⎝   function   ⎠    ╰┈┈┈┈┈┬┈┈┈┈┈╯
+            ╭──────╮            ╱                              │
+            │ salt │───────────´                               │
+            ╰──────╯                                           │
+            ╭─────────────────────╮                            ▼         ╭┈┈┈┈┈┈┈┈┈┈┈┈╮
+            │ encrypted master key│━━━━━━━━━━━━━━━━━━━━━━(decryption)━━━▶┊ master key ┊
+            ╰─────────────────────╯                                      ╰┈┈┈┈┈┈┈┈┈┈┈┈╯
+        </code></pre>
+        <figcaption>The caption for the listing.</figcaption>        
+      </figure>
+
+    <p>Another Figure</p>
+    <figure>
+        <pre><code class="dia" style="width: 10rem">
+                                           +-----+
+              +----[PWR]-------------------| USB |--+
+              |                            +-----+  |
+              |         GND/RST2  [ ][ ]            |
+              |       MOSI2/SCK2  [ ][ ]  A5/SCL[ ] |   C5
+              |          5V/MISO2 [ ][ ]  A4/SDA[ ] |   C4
+              |                             AREF[ ] |
+              |                              GND[ ] |
+              | [ ]N/C                    SCK/13[ ] |   B5
+              | [ ]IOREF                 MISO/12[ ] |   .
+              | [ ]RST                   MOSI/11[ ]~|   .
+              | [ ]3V3    +---+               10[ ]~|   .
+              | [ ]5v    -| A |-               9[ ]~|   .
+              | [ ]GND   -| R |-               8[ ] |   B0
+              | [ ]GND   -| D |-                    |
+              | [ ]Vin   -| U |-               7[ ] |   D7
+              |          -| I |-               6[ ]~|   .
+              | [ ]A0    -| N |-               5[ ]~|   .
+              | [ ]A1    -| O |-               4[ ] |   .
+              | [ ]A2     +---+           INT1/3[ ]~|   .
+              | [ ]A3                     INT0/2[ ] |   .
+              | [ ]A4/SDA  RST SCK MISO     TX>1[ ] |   .
+              | [ ]A5/SCL  [ ] [ ] [ ]      RX←0[ ] |   D0
+              |            [ ] [ ] [ ]              |
+              |  UNO_R3    GND MOSI 5V  ____________/
+              \_______________________/    
+        </code></pre>
+        <figcaption>The caption for the listing.</figcaption>        
+      </figure>
+
+      <pre id="test"></pre>
+
+
+    <script>
+        const diagram = document.getElementById('diagram');
+        // const baseFontSize = parseFloat(window.getComputedStyle(diagram).fontSize)
+        const baseFontSize = 12
+
+
+        function getContentWidth (element) {
+            var styles = getComputedStyle(element)
+
+            return element.clientWidth
+                - parseFloat(styles.paddingLeft)
+                - parseFloat(styles.paddingRight)
+        }
+        function getTextWidth(el) {    
+            // text = document.getElementById("test"); 
+            text = document.createElement("pre"); 
+            document.body.appendChild(text); 
+        
+            text.style.font = "var(--font-c)"; 
+            text.style.fontSize = baseFontSize; 
+            text.style.height = 'auto'; 
+            text.style.width = 'auto'; 
+            text.style.position = 'absolute'; 
+            text.style.whiteSpace = 'no-wrap'; 
+            text.innerHTML = el.innerHTML; 
+        
+            width = Math.ceil(text.scrollWidth); 
+            document.body.removeChild(text); 
+            return width
+        } 
+        function updateDiaWidth (diagram) {
+            const diaTextWidth = getTextWidth(diagram) + 1;
+            const diaElementWidth = getContentWidth(diagram) - 1;
+            if (diaElementWidth < diaTextWidth){
+                let fontSize = (diaElementWidth / diaTextWidth) * baseFontSize;
+                diagram.style.fontSize = `${fontSize}px`;
+            }
+
+            console.log(diaElementWidth, diaTextWidth, baseFontSize)
+        }
+        const toggleFullscreen = (event) => {
+            const dia = event.target;
+            // const diaP= dia.parentElement.parentElement
+            const diaP= dia
+            if (diaP.classList.contains('fullscreen')) {
+                diaP.classList.remove('fullscreen');
+                dia.style.fontSize = baseFontSize+"px";
+            } else {
+                diaP.classList.add('fullscreen');
+                dia.style.fontSize = 1.2*baseFontSize+"px";
+            }
+            updateDiaWidth(dia)
+        };
+
+
+        const minFontSize = 6;
+
+        
+        // apply to all
+        const diagrams = document.querySelectorAll('code.dia');
+        
+        diagrams.forEach((diagram) => {
+            // diagram.addEventListener('wheel', (event) => {
+            //     let fontSize = parseFloat(getComputedStyle(diagram).fontSize);
+            //     fontSize -= Math.sign(event.deltaY)*2
+            //     fontSize = Math.min(Math.max(4, fontSize), 48)
+            //     diagram.style.fontSize = `${fontSize}px`;
+            // });
+            diagram.addEventListener('click', toggleFullscreen);
+            updateDiaWidth(diagram)
+            
+        });
+
+
+
+
+    </script>
+</body>
+</html>
